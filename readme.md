@@ -15,3 +15,5 @@ https://elixir-lang.org/install.html#gnulinux
 Running into issues installing on my Kali laptop. idk if it is an issue with traveling/wifi of Kali... 
 
 Or just docker it: https://hub.docker.com/_/elixir/
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/brandonmcclure/elixer_helloworld/blob/main/readme.md)
