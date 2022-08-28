@@ -13,4 +13,3 @@ tasks:
     sudo apt-get update
     # Install PowerShell
     sudo apt-get install -y powershell
-- init: make
