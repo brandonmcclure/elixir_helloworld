@@ -1,6 +1,5 @@
 tasks:
-- before: pwsh install
-  command: >
+- before: >
     apt-get update &&
     apt-get install -y wget apt-transport-https software-properties-common &&
     wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" &&
