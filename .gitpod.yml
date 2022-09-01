@@ -1,5 +1,5 @@
 tasks:
-- init: pwsh install
+- before: pwsh install
   command: >
     apt-get update &&
     apt-get install -y wget apt-transport-https software-properties-common &&
