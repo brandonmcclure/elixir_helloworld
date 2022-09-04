@@ -44,3 +44,19 @@ size:
 
 publish:
 	docker login; docker push $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG); docker logout
+
+lint: lint_mega lint_credo
+
+lint_mega:
+	docker run -v $${PWD}:/tmp/lint oxsecurity/megalinter:v6
+lint_goodcheck:
+	docker run -t --rm -v $${PWD}:/work sider/goodcheck check
+lint_goodcheck_test:
+	docker run -t --rm -v $${PWD}:/work sider/goodcheck test
+lint_credo: 
+	docker run --rm -v $${PWD}:/home/credo/code -t renderedtext/credo
+
+test:
+	echo 'Test not implemented'
+clean:
+	Remove-Item megalinter-reports -Recurse
