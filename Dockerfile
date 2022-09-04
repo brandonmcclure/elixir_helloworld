@@ -1,6 +1,9 @@
-FROM elixir:1.9.4-slim
+FROM elixir:1.14-slim
 
+RUN mkdir -p /src/webserver
+COPY ./src/webserver/ /src/
 WORKDIR /src
-COPY ./src/HelloWorld.exs /src/HelloWorld.exs
-RUN chmod u+x /src/HelloWorld.exs
-CMD ["elixir", "/src/HelloWorld.exs"]
+RUN mix local.hex --force && \
+  mix deps.get && \
+  mix local.rebar --force
+CMD ["mix", "run","--no-halt"]
