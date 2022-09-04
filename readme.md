@@ -17,3 +17,9 @@ Running into issues installing on my Kali laptop. idk if it is an issue with tra
 Or just docker it: https://hub.docker.com/_/elixir/
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/brandonmcclure/elixer_helloworld/blob/main/readme.md)
+
+### Creating a Cowboy http server via Plug
+
+run `make run_it` to enter a instance of the container so you can run `mix new projectname --sup`. This will create a supervised application in the bound volume.
+
+add my own helloworld.ex module in the `lib` folder. And add `{:plug_cowboy, "~> 2.1"}` to the `defp deps do` in the `mix.exs`
