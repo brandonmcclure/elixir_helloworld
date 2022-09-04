@@ -16,6 +16,7 @@ RUN_PORTS := -p 4040:4040
 
 PLATFORMS := linux/amd64,linux/arm64,linux/arm/v7
 
+.PHONY: all test clean lint
 all: build
 
 getcommitid:
