@@ -30,4 +30,4 @@ add my own helloworld.ex module in the `lib` folder. And add `{:plug_cowboy, "~>
 
 <https://hexdocs.pm/phoenix/installation.html#phoenix>
 
-`make build run_it` then 
+`make build run_it` then
