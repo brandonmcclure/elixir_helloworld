@@ -29,3 +29,5 @@ add my own helloworld.ex module in the `lib` folder. And add `{:plug_cowboy, "~>
 ## Creating a Pheonix http server
 
 <https://hexdocs.pm/phoenix/installation.html#phoenix>
+
+`make build run_it` then 

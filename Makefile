@@ -12,7 +12,7 @@ IMAGE_NAME := elixerdemo
 TAG := :latest
 
 # Run Options
-RUN_PORTS := -p 4040:4040
+RUN_PORTS := -p 4000:4000
 
 PLATFORMS := linux/amd64,linux/arm64,linux/arm/v7
 
@@ -30,11 +30,12 @@ build: getcommitid getbranchname
 
 build_multiarch:
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --platform $(PLATFORMS) .
-
+mix_%:
+	docker run --workdir /mnt -v $${PWD}:/mnt $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) $*
 run: build
-	docker run -d $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run -d --network elixer_helloworld_elixer $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 run_it: build
-	docker run --rm --entrypoint /bin/bash -it $(RUN_PORTS) -v $${PWD}:/mnt $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run --rm --network elixer_helloworld_elixer --entrypoint /bin/bash -it $(RUN_PORTS) -v $${PWD}:/mnt $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 
 package:
 	$$PackageFileName = "$$("$(IMAGE_NAME)" -replace "/","_").tar"; docker save $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -o $$PackageFileName

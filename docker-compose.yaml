@@ -1,4 +1,4 @@
-# Use postgres/example user/password credentials
+# Use postgres/postgres user/password credentials
 version: '3.1'
 
 services:
@@ -6,7 +6,7 @@ services:
     image: postgres:14
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: postgres
     networks:
       - elixer
   adminer:
@@ -19,8 +19,11 @@ services:
   app:
     image: registry.mcd.com/bmcclure89/elixerdemo:latest
     ports:
-      - 4040:4040
+      - 8081:4000
     networks:
       - elixer
 networks:
   elixer:
+    name: elixer
+    driver: overlay
+    attachable: true
