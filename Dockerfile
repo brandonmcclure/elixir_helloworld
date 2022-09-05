@@ -4,6 +4,7 @@ RUN mkdir -p /src/webserver
 COPY ./src/webserver/ /src/
 WORKDIR /src
 RUN mix local.hex --force && \
+  mix archive.install hex phx_new && \
   mix deps.get && \
   mix local.rebar --force
 CMD ["mix", "run","--no-halt"]

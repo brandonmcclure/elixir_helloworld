@@ -31,9 +31,9 @@ build: getcommitid getbranchname
 build_multiarch:
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --platform $(PLATFORMS) .
 
-run:
+run: build
 	docker run -d $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
-run_it:
+run_it: build
 	docker run --rm --entrypoint /bin/bash -it $(RUN_PORTS) -v $${PWD}:/mnt $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 
 package:
@@ -59,5 +59,38 @@ lint_credo:
 
 test:
 	echo 'Test not implemented'
-clean:
+clean: compose_clean
 	Remove-Item megalinter-reports -Recurse
+
+
+CORE_SERVICES := db adminer app
+ALL_SERVICES := ${CORE_SERVICES} 
+
+COMPOSE_ALL_FILES := ${CORE_SERVICES_FILES}
+CORE_SERVICES_FILES := -f docker-compose.yml
+
+# --------------------------
+
+compose_core:
+	@docker-compose ${COMPOSE_CORE_FILES} up -d --build ${CORE_SERVICES}
+
+compose_down:
+	@docker-compose ${COMPOSE_ALL_FILES} down
+
+compose_stop:
+	@docker-compose ${COMPOSE_ALL_FILES} stop ${ALL_SERVICES}
+
+compose_restart:
+	@docker-compose ${COMPOSE_ALL_FILES} restart ${ALL_SERVICES}
+
+compose_rm:
+	@docker-compose $(COMPOSE_ALL_FILES) rm -f ${ALL_SERVICES}
+
+compose_logs:
+	@docker-compose $(COMPOSE_ALL_FILES) logs --follow --tail=1000 ${ALL_SERVICES}
+
+compose_images:
+	@docker-compose $(COMPOSE_ALL_FILES) images ${ALL_SERVICES}
+
+compose_clean: ## Remove all Containers and Delete Volume Data
+	@docker-compose ${COMPOSE_ALL_FILES} down -v
