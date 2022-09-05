@@ -18,10 +18,11 @@ services:
       - elixer
   app:
     image: registry.mcd.com/bmcclure89/elixerdemo:latest
+    working_dir: /src
     volumes:
-      - ./:/src
+      - ./src/hello_pheonix:/src
     ports:
-      - 8081:4000
+      - 4000:4000
     networks:
       - elixer
 networks:
