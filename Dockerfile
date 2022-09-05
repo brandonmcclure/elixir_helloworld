@@ -1,6 +1,8 @@
-FROM elixir:1.14
+FROM elixir:1.14-alpine
 
-RUN mkdir -p /src
+RUN mkdir -p /src && \
+  apk add inotify-tools
+
 COPY ./src/hello_pheonix/ /src/
 WORKDIR /src
 RUN mix local.hex --force && \
@@ -8,7 +10,7 @@ RUN mix local.hex --force && \
   mix deps.get && \
   mix local.rebar --force
 COPY entrypoint.sh /root/entrypoint.sh
-CMD ["/bin/bash", "/root/entrypoint.sh"]
+CMD ["/bin/sh", "/root/entrypoint.sh"]
 # CMD ["mix", "run","--no-halt"]
 
 EXPOSE 4000

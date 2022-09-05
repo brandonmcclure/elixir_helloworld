@@ -33,9 +33,9 @@ build_multiarch:
 mix_%:
 	docker run --workdir /mnt -v $${PWD}:/mnt $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) $*
 run: build
-	docker run -d --network elixer_helloworld_elixer $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run -d --network elixer $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 run_it: build
-	docker run --rm --network elixer_helloworld_elixer --entrypoint /bin/bash -it $(RUN_PORTS) -v $${PWD}:/mnt $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run --rm --network elixer --entrypoint /bin/sh -it $(RUN_PORTS) -v $${PWD}/src/hello_pheonix:/src $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 
 package:
 	$$PackageFileName = "$$("$(IMAGE_NAME)" -replace "/","_").tar"; docker save $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -o $$PackageFileName

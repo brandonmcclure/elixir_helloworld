@@ -30,4 +30,8 @@ add my own helloworld.ex module in the `lib` folder. And add `{:plug_cowboy, "~>
 
 <https://hexdocs.pm/phoenix/installation.html#phoenix>
 
-`make build run_it` then
+`make build run_it` then `mix phx.new hello` to create your new project.
+
+Change the `config/dev.exs` ip binding to 0.0.0.0.
+
+The entrypoint.sh script will run `mix ecto.create` on start. That should probably be some elixer code.

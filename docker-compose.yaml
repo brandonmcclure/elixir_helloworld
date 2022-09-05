@@ -18,6 +18,8 @@ services:
       - elixer
   app:
     image: registry.mcd.com/bmcclure89/elixerdemo:latest
+    volumes:
+      - ./:/src
     ports:
       - 8081:4000
     networks:
