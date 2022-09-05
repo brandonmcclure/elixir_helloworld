@@ -27,6 +27,4 @@ services:
       - elixer
 networks:
   elixer:
-    name: elixer
     driver: overlay
-    attachable: true
