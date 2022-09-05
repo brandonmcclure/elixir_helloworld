@@ -6,7 +6,7 @@ endif
 
 .SHELLFLAGS := -NoProfile -Command
 
-REGISTRY_NAME := registry.mcd.com/
+REGISTRY_NAME := 
 REPOSITORY_NAME := bmcclure89/
 IMAGE_NAME := elixerdemo
 TAG := :latest
@@ -95,3 +95,5 @@ compose_images:
 
 compose_clean: ## Remove all Containers and Delete Volume Data
 	@docker-compose ${COMPOSE_ALL_FILES} down -v
+k_apply:
+	kubectl apply -f $${PWD}/k8s
