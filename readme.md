@@ -25,3 +25,13 @@ Or just docker it: <https://hub.docker.com/_/elixir/>
 run `make run_it` to enter a instance of the container so you can run `mix new projectname --sup`. This will create a supervised application in the bound volume.
 
 add my own helloworld.ex module in the `lib` folder. And add `{:plug_cowboy, "~> 2.1"}` to the `defp deps do` in the `mix.exs`
+
+## Creating a Pheonix http server
+
+<https://hexdocs.pm/phoenix/installation.html#phoenix>
+
+`make build run_it` then `mix phx.new hello` to create your new project.
+
+Change the `config/dev.exs` ip binding to 0.0.0.0.
+
+The entrypoint.sh script will run `mix ecto.create` on start. That should probably be some elixer code.
