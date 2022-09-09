@@ -10,6 +10,7 @@ REGISTRY_NAME :=
 REPOSITORY_NAME := bmcclure89/
 IMAGE_NAME := elixerdemo
 TAG := :latest
+TARGET_ELIXER_TAG := :1.14-alpine
 
 # Run Options
 RUN_PORTS := -p 4000:4000
@@ -25,8 +26,9 @@ getcommitid:
 getbranchname:
 	$(eval BRANCH_NAME = $(shell (git branch --show-current ) -replace '/','.'))
 
+DOCKER_MIX_RUN:= docker run -d --rm elixer$(TARGET_ELIXER_TAG)
 build: getcommitid getbranchname
-	docker build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME)_$(COMMITID) .
+	docker build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME)_$(COMMITID) --build-arg arg=$(TARGET_ELIXER_TAG) .
 
 build_multiarch:
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --platform $(PLATFORMS) .
@@ -97,3 +99,7 @@ compose_clean: ## Remove all Containers and Delete Volume Data
 	@docker-compose ${COMPOSE_ALL_FILES} down -v
 k_apply:
 	kubectl apply -f $${PWD}/k8s
+
+# EXample: set SCHEMA_OPTS = "Garden user users name:string email:string:unique"; make new_mxschema
+new_mxschema:
+	$(DOCKER_MIX_RUN) mix phx.gen.context $(SCHEMA_OPTS)

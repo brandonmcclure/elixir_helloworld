@@ -1,4 +1,5 @@
-FROM elixir:1.14-alpine
+ARG TARGET_ELIXER_VERSION=:1.14-alpine
+FROM elixir${TARGET_ELIXER_VERSION}
 
 RUN mkdir -p /src && \
   apk add inotify-tools
