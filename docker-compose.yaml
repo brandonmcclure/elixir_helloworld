@@ -8,23 +8,29 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     networks:
-      - elixer
+      - elixir
   adminer:
     image: adminer:4
     restart: always
     ports:
       - 8080:8080
     networks:
-      - elixer
+      - elixir
   app:
-    image: registry.mcd.com/bmcclure89/elixerdemo:latest
-    working_dir: /src
-    volumes:
-      - ./src/hello_pheonix:/src
+    image: registry.mcd.com/bmcclure89/elixirdemo:latest
     ports:
       - 4000:4000
     networks:
-      - elixer
+      - elixir
+  app02:
+    image: registry.mcd.com/bmcclure89/elixirdemo:latest
+    environment:
+      - elixir_PORT=4000
+    ports:
+      - 4001:4000
+    networks:
+      - elixir
 networks:
-  elixer:
+  elixir:
     driver: overlay
+    attachable: true
