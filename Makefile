@@ -8,9 +8,9 @@ endif
 
 REGISTRY_NAME := 
 REPOSITORY_NAME := bmcclure89/
-IMAGE_NAME := elixerdemo
+IMAGE_NAME := elixirdemo
 TAG := :latest
-TARGET_ELIXER_TAG := :1.14-alpine
+TARGET_ELIXER_TAG := elixir:1.14-alpine
 
 # Run Options
 RUN_PORTS := -p 4000:4000
@@ -26,18 +26,18 @@ getcommitid:
 getbranchname:
 	$(eval BRANCH_NAME = $(shell (git branch --show-current ) -replace '/','.'))
 
-DOCKER_MIX_RUN:= docker run -d --rm elixer$(TARGET_ELIXER_TAG)
+DOCKER_MIX_RUN:= docker run -d --rm elixir$(TARGET_ELIXER_TAG)
 build: getcommitid getbranchname
-	docker build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME)_$(COMMITID) --build-arg arg=$(TARGET_ELIXER_TAG) .
+	docker build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME)_$(COMMITID) --build-arg TARGET_ELIXER_TAG=$(TARGET_ELIXER_TAG) .
 
 build_multiarch:
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --platform $(PLATFORMS) .
 mix_%:
 	docker run --workdir /mnt -v $${PWD}:/mnt $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) $*
 run: build
-	docker run -d --network elixer $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run -d --network elixir $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 run_it: build
-	docker run --rm --network elixer --entrypoint /bin/sh -it $(RUN_PORTS) -v $${PWD}/src/hello_pheonix:/src $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run --rm --entrypoint /bin/sh -it $(RUN_PORTS) -v $${PWD}/src/hello_pheonix:/src $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 
 package:
 	$$PackageFileName = "$$("$(IMAGE_NAME)" -replace "/","_").tar"; docker save $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -o $$PackageFileName
@@ -103,3 +103,6 @@ k_apply:
 # EXample: set SCHEMA_OPTS = "Garden user users name:string email:string:unique"; make new_mxschema
 new_mxschema:
 	$(DOCKER_MIX_RUN) mix phx.gen.context $(SCHEMA_OPTS)
+# Example: set REST_OPTS = "Garden user users name:string email:string:unique --no-context --no-schema"; make new_mxrest
+new_mxrest:
+	$(DOCKER_MIX_RUN) mix phx.gen.json $(REST_OPTS)
