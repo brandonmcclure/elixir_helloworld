@@ -6,9 +6,9 @@ endif
 
 .SHELLFLAGS := -NoProfile -Command
 
-REGISTRY_NAME := 
+REGISTRY_NAME := registry.mcd.com/
 REPOSITORY_NAME := bmcclure89/
-IMAGE_NAME := elixerdemo
+IMAGE_NAME := elixirdemo
 TAG := :latest
 
 # Run Options
@@ -32,10 +32,12 @@ build_multiarch:
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --platform $(PLATFORMS) .
 mix_%:
 	docker run --workdir /mnt -v $${PWD}:/mnt $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) $*
-run: build
-	docker run -d --network elixer $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+docker_network:
+	-docker network create elixir
+run: build docker_network
+	docker run -d --network elixir $(RUN_PORTS) $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 run_it: build
-	docker run --rm --network elixer --entrypoint /bin/sh -it $(RUN_PORTS) -v $${PWD}/src/hello_pheonix:/src $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
+	docker run --rm --network elixir --entrypoint /bin/sh -it $(RUN_PORTS) -v $${PWD}/src/hello_pheonix:/src $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG)
 
 package:
 	$$PackageFileName = "$$("$(IMAGE_NAME)" -replace "/","_").tar"; docker save $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -o $$PackageFileName
